@@ -72,7 +72,7 @@ public:
 			if (OpenFile != nullptr)
 			{
 				CName = var + ".kimkijun";
-				cout << "암호화된 파일명 : " << CName << endl;
+				cout << endl << "암호화된 파일명 : " << CName << endl;
 				WriteFile = fopen(CName.c_str(), "w+b");
 
 				while ((i = fgetc(OpenFile)) != EOF)
